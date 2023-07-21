@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('lama_cuti');
             $table->text('keterangan');
             $table->timestamps();
+            
+            $table->foreign('nomor_induk')->references('nomor_induk')->on('karyawan');
         });
     }
 

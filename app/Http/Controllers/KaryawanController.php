@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\KaryawanResource;
 use App\Http\Resources\KaryawanResourceCollection;
+use App\Models\Cuti;
 use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class KaryawanController extends Controller
 {
@@ -101,6 +101,18 @@ class KaryawanController extends Controller
     public function destroy(string $nomor_induk)
     {
         $karyawan = Karyawan::where('nomor_induk',$nomor_induk)->delete();
-        return response('Karyawan berhasil dihapus');
+        return response()->json('Karyawan berhasil dihapus');
+    }
+
+    public function karyawanTerlama()
+    {
+        $karyawan = Karyawan::orderBy('tanggal_bergabung','desc')->take(3)->get();
+        return new KaryawanResourceCollection($karyawan);
+    }
+
+    public function sisaCuti()
+    {
+        $karyawan = Cuti::select('nomor_induk')->distinct()->get();
+        return new KaryawanResourceCollection($karyawan);
     }
 }

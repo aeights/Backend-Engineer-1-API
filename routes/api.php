@@ -20,3 +20,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('karyawan',KaryawanController::class);
+
+Route::get('/karyawan-terlama',[KaryawanController::class,'karyawanTerlama']);
+
+Route::get('/pernah-cuti',[KaryawanController::class,'pernahCuti']);
+
+Route::get('/sisa-cuti',[KaryawanController::class,'sisaCuti']);
