@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\KaryawanResource;
 use App\Http\Resources\KaryawanResourceCollection;
+use App\Http\Resources\SisaCutiCollection;
 use App\Models\Cuti;
 use App\Models\Karyawan;
 use Illuminate\Http\Request;
@@ -110,9 +111,27 @@ class KaryawanController extends Controller
         return new KaryawanResourceCollection($karyawan);
     }
 
+    public function pernahCuti()
+    {
+        $cuti = Cuti::select('nomor_induk')->distinct()->get();
+        $karyawan = Karyawan::whereIn('nomor_induk',$cuti)->get();
+        return new KaryawanResourceCollection($karyawan);
+    }
+
     public function sisaCuti()
     {
-        $karyawan = Cuti::select('nomor_induk')->distinct()->get();
-        return new KaryawanResourceCollection($karyawan);
+        $data = Karyawan::with('cuti')->get();
+        $cuti = [];
+        foreach ($data as $value) {
+            $cuti[] = [
+                'nomor_induk' => $value->nomor_induk,
+                'nama' => $value->nama,
+                'sisa_cuti' => 12-$value->cuti->sum('lama_cuti'),
+            ];
+        }
+        
+        return response()->json([
+            'data' => $cuti
+        ]);
     }
 }

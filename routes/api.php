@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CutiController;
 use App\Http\Controllers\KaryawanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('karyawan',KaryawanController::class);
+
+Route::apiResource('cuti',CutiController::class);
 
 Route::get('/karyawan-terlama',[KaryawanController::class,'karyawanTerlama']);
 

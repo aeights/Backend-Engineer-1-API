@@ -20,7 +20,7 @@ class KaryawanResource extends JsonResource
             'nama' => $this->nama,
             'alamat' => $this->alamat,
             'tanggal_lahir' => $this->tanggal_lahir,
-            'tanggal_bergabung' => $this->tanggal_bergabung
+            'tanggal_bergabung' => $this->tanggal_bergabung,
         ];
     }
 }

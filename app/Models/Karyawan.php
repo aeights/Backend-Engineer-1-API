@@ -17,6 +17,6 @@ class Karyawan extends Model
 
     public function cuti()
     {
-        return $this->hasMany(Cuti::class);
+        return $this->hasMany(Cuti::class,'nomor_induk','nomor_induk');
     }
 }
