@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\KaryawanResource;
 use App\Http\Resources\KaryawanResourceCollection;
-use App\Http\Resources\SisaCutiCollection;
 use App\Models\Cuti;
 use App\Models\Karyawan;
 use Illuminate\Http\Request;
@@ -57,6 +56,9 @@ class KaryawanController extends Controller
     public function show(string $nomor_induk)
     {
         $karyawan = Karyawan::where('nomor_induk',$nomor_induk)->first();
+        if (!$karyawan) {
+            return response()->json(['message' => 'Karyawan tidak ditemukan'], 404);
+        }
         return new KaryawanResource($karyawan);
     }
 
@@ -94,7 +96,7 @@ class KaryawanController extends Controller
         $karyawan_update->save();
 
         return response()->json([
-            'data' => new KaryawanResource($karyawan),
+            'data' => new KaryawanResource($karyawan_update),
             'message' => 'Karyawan berhasil diupdate'
         ]);
     }
@@ -102,12 +104,16 @@ class KaryawanController extends Controller
     public function destroy(string $nomor_induk)
     {
         $karyawan = Karyawan::where('nomor_induk',$nomor_induk)->delete();
-        return response()->json('Karyawan berhasil dihapus');
+        if (!$karyawan) {
+            return response()->json(['message' => 'Karyawan tidak ditemukan'], 404);
+        }
+
+        return response()->json(['message' => 'Karyawan berhasil dihapus']);
     }
 
     public function karyawanTerlama()
     {
-        $karyawan = Karyawan::orderBy('tanggal_bergabung','desc')->take(3)->get();
+        $karyawan = Karyawan::orderBy('tanggal_bergabung')->take(3)->get();
         return new KaryawanResourceCollection($karyawan);
     }
 
